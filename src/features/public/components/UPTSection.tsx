@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 import useScrollReveal from "@/hooks/useScrollReveal";
 
@@ -54,9 +55,9 @@ export default function UPTSection() {
               Pemasyarakatan (Bapas), Lembaga Pembinaan Khusus Anak (LPKA), dan
               Rumah Penyimpanan Benda Sitaan Negara (Rupbasan).
             </p>
-            <a href="#" className="btn-gold">
+            <Link href="/upt" className="btn-gold">
               Lihat Selengkapnya &gt;
-            </a>
+            </Link>
 
             {/* <div className="upt-list">
               <p className="upt-list-title">Unit pelaksana teknis wilayah</p>

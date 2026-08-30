@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import useScrollReveal from "@/hooks/useScrollReveal";
 
 type NewsItem = {
@@ -103,9 +104,9 @@ export default function NewsSection() {
                 <span className="news-date-badge">{news.meta}</span>
                 <h3 className="news-card-title">{news.title}</h3>
                 <p className="news-card-excerpt">{news.excerpt}</p>
-                <a href="#berita" className="btn-gold-sm">
+                <Link href="/berita" className="btn-gold-sm">
                   Lihat Selengkapnya &gt;
-                </a>
+                </Link>
               </div>
             </article>
           ))}

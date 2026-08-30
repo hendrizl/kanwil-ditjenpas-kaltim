@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 import useScrollReveal from "@/hooks/useScrollReveal";
 
@@ -50,9 +51,9 @@ export default function AboutSection() {
             mewujudkan sistem pemasyarakatan yang humanis dan berkeadilan.
           </p> */}
 
-          <a href="#" className="btn-gold">
+          <Link href="/tentang" className="btn-gold">
             Lihat Selengkapnya &gt;
-          </a>
+          </Link>
         </div>
 
         {/* Right - Profil Card */}

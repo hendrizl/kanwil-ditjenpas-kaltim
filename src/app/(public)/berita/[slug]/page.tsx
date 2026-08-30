@@ -23,7 +23,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
   return (
     <main className="min-h-screen bg-[#F7F9FC] pb-24">
       {/* Hero Header */}
-      <section className="relative pt-40 pb-20 bg-[#00223D] overflow-hidden">
+      <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-[#00223D] overflow-hidden">
         <div
           className="absolute inset-0 z-0 opacity-20"
           style={{
@@ -40,10 +40,10 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
             <span className="px-4 py-1.5 bg-[#E8C84A] text-[#00223D] font-bold text-sm uppercase tracking-wider rounded-lg mb-6 inline-block">
               {news.category}
             </span>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6 leading-tight">
               {news.title}
             </h1>
-            <div className="flex items-center gap-6 text-white/80 text-sm font-medium">
+            <div className="flex flex-wrap items-center gap-4 md:gap-6 text-white/80 text-sm font-medium">
               <span className="flex items-center gap-2">
                 <Calendar size={18} className="text-[#E8C84A]" /> {news.date}
               </span>
@@ -55,12 +55,12 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
         </div>
       </section>
 
-      <div className="container mt-[-40px] relative z-20">
-        <div className="grid lg:grid-cols-12 gap-12">
+      <div className="container mt-[-20px] md:mt-[-40px] relative z-20">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Main Content */}
           <div className="lg:col-span-8 space-y-8">
-            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-gray-100">
-              <div className="w-full aspect-video bg-gray-200 rounded-2xl mb-10 relative overflow-hidden flex items-center justify-center">
+            <div className="bg-white rounded-3xl p-6 md:p-12 shadow-xl border border-gray-100">
+              <div className="w-full aspect-video bg-gray-200 rounded-2xl mb-8 md:mb-10 relative overflow-hidden flex items-center justify-center">
                 {/* Replace with actual Image when available */}
                 <div className="absolute inset-0 bg-[#05284E] flex items-center justify-center opacity-90">
                   <span className="text-white/40 text-lg font-medium">Gambar Utama Berita</span>
@@ -95,7 +95,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
 
           {/* Sidebar */}
           <div className="lg:col-span-4 space-y-8">
-            <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 sticky top-32">
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-gray-100 sticky top-24 md:top-32">
               <h3 className="text-xl font-bold text-[#00223D] mb-6 flex items-center gap-3">
                 <span className="w-1.5 h-6 bg-[#E8C84A] rounded-full inline-block" />
                 Berita Terkait

@@ -9,7 +9,7 @@ export default function BeritaPage() {
   return (
     <main className="min-h-screen bg-[#F7F9FC] pb-24">
       {/* Hero Header */}
-      <section className="relative pt-40 pb-20 bg-[#00223D] overflow-hidden">
+      <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-[#00223D] overflow-hidden">
         <div
           className="absolute inset-0 z-0"
           style={{
@@ -21,7 +21,7 @@ export default function BeritaPage() {
           <div className="w-16 h-16 bg-[#E8C84A] rounded-2xl mx-auto flex items-center justify-center mb-6 shadow-lg">
             <Newspaper size={36} className="text-[#00223D]" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-6">
             Berita & Publikasi
           </h1>
           <p className="text-white/80 max-w-2xl mx-auto text-lg">
@@ -30,7 +30,7 @@ export default function BeritaPage() {
         </div>
       </section>
 
-      <div className="container mt-12 space-y-16">
+      <div className="container mt-8 md:mt-12 space-y-12 md:space-y-16">
         {/* Featured Article */}
         <section>
           <div className="flex items-center justify-between mb-8 mt-16">
@@ -48,7 +48,7 @@ export default function BeritaPage() {
               </div>
             </div>
 
-            <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+            <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-center">
               <div className="flex items-center gap-4 mb-4">
                 <span className="px-3 py-1 bg-[#E8C84A]/20 text-[#00223D] font-bold text-xs rounded-full">Kegiatan Wilayah</span>
                 <span className="text-sm text-gray-500 flex items-center gap-1">
@@ -79,7 +79,7 @@ export default function BeritaPage() {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {DUMMY_NEWS.map((news, idx) => (
               <Link href={`/berita/${news.slug}`} key={idx} className="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100 hover:shadow-xl transition-shadow cursor-pointer group flex flex-col">
                 <div className="aspect-video bg-gray-200 relative overflow-hidden">

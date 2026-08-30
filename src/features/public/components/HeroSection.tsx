@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 const SLIDES: string[] = ["/kanwil-ditjenpas-kaltim/assets/banner_1.png", "/kanwil-ditjenpas-kaltim/assets/banner_2.png", "/kanwil-ditjenpas-kaltim/assets/Banner_3.png"];
 const SLIDE_DURATION = 5000;
 
@@ -92,18 +93,18 @@ export default function HeroSection() {
 
         {/* CTA Buttons */}
         <div className="animate-fade-in-up delay-300 hero-cta-row">
-          <a
-            href="#upt"
+          <Link
+            href="/upt"
             className="hero-btn-primary"
           >
             Wilayah Kerja
-          </a>
-          <a
-            href="#informasi"
+          </Link>
+          <Link
+            href="/informasi"
             className="hero-btn-outline"
           >
             Info Layanan
-          </a>
+          </Link>
         </div>
       </div>
 
