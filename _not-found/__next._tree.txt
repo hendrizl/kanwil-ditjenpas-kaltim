@@ -1,2 +1,2 @@
-:HL["/kanwil-ditjenpas-kaltim/_next/static/chunks/0r6zydp7eo8dk.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"poaQPk_hkEpE6kT4kNuZt"}
+:HL["/kanwil-ditjenpas-kaltim/_next/static/chunks/2gy-1ktvbadza.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"ARfhNpMCn7Q-vBjYhE48P"}
