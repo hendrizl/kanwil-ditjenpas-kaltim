@@ -60,7 +60,7 @@ export default function AboutSection() {
           <div className="about-card">
             <div className="about-card-logo">
               <Image
-                src="/assets/logo_pas.png"
+                src="/kanwil-ditjenpas-kaltim/assets/logo_pas.png"
                 alt="Logo Pemasyarakatan"
                 width={220}
                 height={220}

@@ -29,7 +29,7 @@ export default function ComplaintSection() {
         <div className="complaint-grid">
           <div className="scroll-hidden complaint-card">
             <Image
-              src="/assets/logo_lapor.png"
+              src="/kanwil-ditjenpas-kaltim/assets/logo_lapor.png"
               alt="LAPOR!"
               width={180}
               height={54}
@@ -44,7 +44,7 @@ export default function ComplaintSection() {
 
           <div className="scroll-hidden complaint-card">
             <Image
-              src="/assets/logo_wbs.png"
+              src="/kanwil-ditjenpas-kaltim/assets/logo_wbs.png"
               alt="WBS - Whistleblowing System"
               width={90}
               height={77}
@@ -59,7 +59,7 @@ export default function ComplaintSection() {
 
           <div className="scroll-hidden complaint-card">
             <Image
-              src="/assets/logo_wa.png"
+              src="/kanwil-ditjenpas-kaltim/assets/logo_wa.png"
               alt="WhatsApp"
               width={80}
               height={80}

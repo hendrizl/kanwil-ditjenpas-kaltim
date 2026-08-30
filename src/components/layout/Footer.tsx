@@ -45,7 +45,7 @@ export default function Footer() {
         <div className="footer-brand">
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             <Image
-              src="/assets/logo_imipas.png"
+              src="/kanwil-ditjenpas-kaltim/assets/logo_imipas.png"
               alt="Logo IMIPAS"
               width={56}
               height={56}
@@ -53,7 +53,7 @@ export default function Footer() {
               style={{ objectFit: "contain", height: "auto" }}
             />
             <Image
-              src="/assets/logo_pas_outline.png"
+              src="/kanwil-ditjenpas-kaltim/assets/logo_pas_outline.png"
               alt="Logo PAS"
               width={64}
               height={64}
@@ -98,7 +98,7 @@ export default function Footer() {
           <div className="footer-socmed">
             <p className="footer-subtitle">Sosial Media</p>
             <Image
-              src="/assets/ic_sosmed.png"
+              src="/kanwil-ditjenpas-kaltim/assets/ic_sosmed.png"
               alt="Sosial Media"
               width={200}
               height={40}

@@ -44,14 +44,14 @@ export default function Navbar() {
         <Link href="/" className="navbar-brand">
           <span className="navbar-logos" aria-hidden="true">
             <Image
-              src="/assets/logo_imipas.png"
+              src="/kanwil-ditjenpas-kaltim/assets/logo_imipas.png"
               alt=""
               width={38}
               height={38}
               style={{ objectFit: "contain" }}
             />
             <Image
-              src="/assets/logo_pas_outline.png"
+              src="/kanwil-ditjenpas-kaltim/assets/logo_pas_outline.png"
               alt=""
               width={40}
               height={40}

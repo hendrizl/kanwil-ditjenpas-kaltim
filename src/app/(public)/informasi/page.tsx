@@ -43,7 +43,7 @@ export default function InformasiPage() {
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <a href="#" className="bg-white p-8 rounded-3xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all border border-gray-100 flex flex-col items-center justify-center gap-6 group">
               <div className="h-20 flex items-center justify-center">
-                <Image src="/assets/logo_lapor.png" alt="LAPOR" className="h-14 w-auto object-contain group-hover:scale-105 transition-transform" width={180} height={54} />
+                <Image src="/kanwil-ditjenpas-kaltim/assets/logo_lapor.png" alt="LAPOR" className="h-14 w-auto object-contain group-hover:scale-105 transition-transform" width={180} height={54} />
               </div>
               <div className="text-center">
                 <h3 className="font-bold text-[#00223D] mb-1">SP4N LAPOR!</h3>
@@ -52,7 +52,7 @@ export default function InformasiPage() {
             </a>
             <a href="#" className="bg-white p-8 rounded-3xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all border border-gray-100 flex flex-col items-center justify-center gap-6 group">
               <div className="h-20 flex items-center justify-center">
-                <Image src="/assets/logo_wbs.png" alt="WBS" className="h-20 w-auto object-contain group-hover:scale-105 transition-transform" width={90} height={77} />
+                <Image src="/kanwil-ditjenpas-kaltim/assets/logo_wbs.png" alt="WBS" className="h-20 w-auto object-contain group-hover:scale-105 transition-transform" width={90} height={77} />
               </div>
               <div className="text-center">
                 <h3 className="font-bold text-[#00223D] mb-1">Whistleblowing System</h3>
@@ -61,7 +61,7 @@ export default function InformasiPage() {
             </a>
             <a href="#" className="bg-white p-8 rounded-3xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all border border-gray-100 flex flex-col items-center justify-center gap-6 group">
               <div className="h-20 flex items-center justify-center">
-                <Image src="/assets/logo_wa.png" alt="WhatsApp" className="h-16 w-auto object-contain group-hover:scale-105 transition-transform" width={80} height={80} />
+                <Image src="/kanwil-ditjenpas-kaltim/assets/logo_wa.png" alt="WhatsApp" className="h-16 w-auto object-contain group-hover:scale-105 transition-transform" width={80} height={80} />
               </div>
               <div className="text-center">
                 <h3 className="font-bold text-[#00223D] mb-1">WhatsApp Pengaduan</h3>

@@ -17,7 +17,7 @@ const NEWS_DATA: NewsItem[] = [
     title: "Penguatan layanan pemasyarakatan di Kalimantan Timur",
     excerpt:
       "Kanwil Ditjenpas Kalimantan Timur terus memperkuat koordinasi layanan, pembinaan, dan pengawasan pada satuan kerja pemasyarakatan.",
-    image: "/assets/-.jpeg",
+    image: "/kanwil-ditjenpas-kaltim/assets/-.jpeg",
   },
   {
     meta: "Pembinaan",
@@ -91,7 +91,7 @@ export default function NewsSection() {
             >
               <div className="news-card-img">
                 <Image
-                  src={news.image ?? "/assets/logo_pas_outline.png"}
+                  src={news.image ?? "/kanwil-ditjenpas-kaltim/assets/logo_pas_outline.png"}
                   alt={news.image ? news.title : ""}
                   width={news.image ? 640 : 80}
                   height={news.image ? 360 : 80}

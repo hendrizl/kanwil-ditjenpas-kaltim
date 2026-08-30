@@ -186,7 +186,7 @@ export default function TentangPage() {
             <div className="md:col-span-4 bg-gray-100 flex items-center justify-center p-8 relative">
               <div className="absolute top-0 left-0 w-full h-2 bg-[#E8C84A]" />
               <Image
-                src="/assets/logo_pas.png"
+                src="/kanwil-ditjenpas-kaltim/assets/logo_pas.png"
                 alt="Logo Pas"
                 width={200}
                 height={200}

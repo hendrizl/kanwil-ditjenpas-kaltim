@@ -70,7 +70,7 @@ export default function UPTSection() {
 
           <div className="scroll-hidden upt-map">
             <Image
-              src="/assets/maps.png"
+              src="/kanwil-ditjenpas-kaltim/assets/maps.png"
               alt="Peta Wilayah Kerja Kanwil Ditjenpas Kaltim"
               fill
               style={{

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
-const SLIDES: string[] = ["/assets/banner_1.png", "/assets/banner_2.png", "/assets/Banner_3.png"];
+const SLIDES: string[] = ["/kanwil-ditjenpas-kaltim/assets/banner_1.png", "/kanwil-ditjenpas-kaltim/assets/banner_2.png", "/kanwil-ditjenpas-kaltim/assets/Banner_3.png"];
 const SLIDE_DURATION = 5000;
 
 export default function HeroSection() {
