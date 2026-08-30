@@ -22,7 +22,7 @@ export default function UPTPage() {
             Peta Unit Pelaksana Teknis
           </h1>
           <p className="text-white/80 max-w-2xl mx-auto text-lg">
-            Membawahi 16 Unit Pelaksana Teknis (Lapas, Rutan, Bapas, LPKA, dan Rupbasan) yang tersebar di seluruh wilayah kerja Provinsi Kalimantan Timur.
+            Membawahi 16 Unit Pelaksana Teknis (Lapas, Rutan, dan Bapas) yang tersebar di seluruh wilayah kerja Provinsi Kalimantan Timur dan Utara.
           </p>
         </div>
       </section>
@@ -31,8 +31,8 @@ export default function UPTPage() {
       <div className="max-w-[1300px] mx-auto px-4 md:px-8 mt-12">
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
           <div className="w-full aspect-[3/4] md:aspect-[4/3] lg:aspect-[16/9] bg-gray-100 relative">
-            <iframe 
-              src="/peta/index.html" 
+            <iframe
+              src="https://navipas-kaltim.github.io/peta-pemasyarakatan-kaltim/"
               title="Peta Pemasyarakatan Kaltim"
               className="w-full h-full absolute inset-0 border-0"
               allowFullScreen

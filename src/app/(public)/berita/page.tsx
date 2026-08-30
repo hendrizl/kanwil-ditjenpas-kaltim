@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Calendar, ChevronRight, Newspaper, ArrowRight } from "lucide-react";
+import { DUMMY_NEWS } from "@/data/news";
 
 export default function BeritaPage() {
   return (
@@ -78,45 +80,8 @@ export default function BeritaPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Sosialisasi Pemenuhan Hak Asasi Manusia bagi Warga Binaan",
-                category: "Pembinaan",
-                date: "20 Agustus 2026",
-                excerpt: "Langkah konkrit kanwil dalam memastikan seluruh UPT menerapkan standar HAM yang ketat dalam pembinaan sehari-hari."
-              },
-              {
-                title: "Kunjungan Kerja Kakanwil ke Lapas Kelas IIA Samarinda",
-                category: "Kunjungan",
-                date: "18 Agustus 2026",
-                excerpt: "Meninjau langsung sarana prasarana serta fasilitas kesehatan yang ada di dalam Lapas guna memastikan kelayakan operasional."
-              },
-              {
-                title: "Sinergitas Aparat Penegak Hukum dalam Pengamanan UPT",
-                category: "Keamanan",
-                date: "15 Agustus 2026",
-                excerpt: "Kerjasama strategis antara Ditjenpas dengan Kepolisian daerah Kalimantan Timur resmi diperkuat melalui MoU terbaru."
-              },
-              {
-                title: "Pelatihan Kemandirian Bersertifikat bagi Narapidana",
-                category: "Pelatihan",
-                date: "10 Agustus 2026",
-                excerpt: "Warga binaan diberikan bekal keterampilan mulai dari perbengkelan hingga tata boga agar siap kembali ke masyarakat."
-              },
-              {
-                title: "Deklarasi Janji Kinerja Tahun 2026",
-                category: "Internal",
-                date: "05 Agustus 2026",
-                excerpt: "Seluruh jajaran pegawai Kemenkumham Kaltim menandatangani pakta integritas guna mewujudkan WBK/WBBM."
-              },
-              {
-                title: "Pemusnahan Barang Bukti Hasil Penggeledahan",
-                category: "Keamanan",
-                date: "01 Agustus 2026",
-                excerpt: "Transparansi hasil razia rutin dibuktikan dengan pemusnahan barang-barang terlarang yang ditemukan di kamar hunian."
-              }
-            ].map((news, idx) => (
-              <div key={idx} className="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100 hover:shadow-xl transition-shadow cursor-pointer group flex flex-col">
+            {DUMMY_NEWS.map((news, idx) => (
+              <Link href={`/berita/${news.slug}`} key={idx} className="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100 hover:shadow-xl transition-shadow cursor-pointer group flex flex-col">
                 <div className="aspect-video bg-gray-200 relative overflow-hidden">
                   <div className="w-full h-full bg-[#05284E] flex items-center justify-center opacity-80 group-hover:scale-105 transition-transform duration-500">
                     <span className="text-white/30 text-sm">Ilustrasi Berita</span>
@@ -143,7 +108,7 @@ export default function BeritaPage() {
                     </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

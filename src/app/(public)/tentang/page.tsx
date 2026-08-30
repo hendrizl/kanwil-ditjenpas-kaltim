@@ -63,34 +63,36 @@ export default function TentangPage() {
             <div className="w-20 h-1.5 bg-[#E8C84A] mx-auto mt-4 rounded-full" />
           </div>
           <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-2xl p-8 border-t-4 border-[#E8C84A] shadow-xl hover:shadow-2xl transition-shadow">
-            <div className="w-14 h-14 bg-[#082D4B] rounded-xl flex items-center justify-center mb-6">
-              <Eye className="text-[#E8C84A]" size={32} />
+            <div className="bg-white rounded-2xl p-8 border-t-4 border-[#E8C84A] shadow-xl hover:shadow-2xl transition-shadow">
+              <div className="w-14 h-14 bg-[#082D4B] rounded-xl flex items-center justify-center mb-6">
+                <Eye className="text-[#E8C84A]" size={32} />
+              </div>
+              <h2 className="text-2xl font-bold text-[#00223D] mb-4">Visi</h2>
+              <p className="text-gray-700 leading-relaxed text-justify">
+                "Terwujudnya Pemasyarakatan yang Profesional dalam Mendukung Penegakan Hukum Berbasis Hak Asasi Manusia yang Berkeadilan untuk Mewujudkan Indonesia Maju yang Berdaulat, Mandiri dan Berkepribadian, berlandaskan Gotong Royong."
+              </p>
             </div>
-            <h2 className="text-2xl font-bold text-[#00223D] mb-4">Visi</h2>
-            <p className="text-gray-700 leading-relaxed text-justify">
-              "Terwujudnya Pemasyarakatan yang Profesional dalam Mendukung Penegakan Hukum Berbasis Hak Asasi Manusia yang Berkeadilan untuk Mewujudkan Indonesia Maju yang Berdaulat, Mandiri dan Berkepribadian, berlandaskan Gotong Royong."
-            </p>
-          </div>
-          <div className="bg-white rounded-2xl p-8 border-t-4 border-[#E8C84A] shadow-xl hover:shadow-2xl transition-shadow">
-            <div className="w-14 h-14 bg-[#082D4B] rounded-xl flex items-center justify-center mb-6">
-              <Target className="text-[#E8C84A]" size={32} />
+            <div className="bg-white rounded-2xl p-8 border-t-4 border-[#E8C84A] shadow-xl hover:shadow-2xl transition-shadow">
+              <div className="w-14 h-14 bg-[#082D4B] rounded-xl flex items-center justify-center mb-6">
+                <Target className="text-[#E8C84A]" size={32} />
+              </div>
+              <h2 className="text-2xl font-bold text-[#00223D] mb-4">Misi</h2>
+              <ul className="space-y-4 text-gray-700">
+                {[
+                  "Mendukung Penegakan Hukum di Bidang Penyelenggaraan Pemasyarakatan yang Bebas dari Korupsi, Bermartabat dan Terpercaya",
+                  "Ikut Serta dalam Menjaga Stabilitas Kemanan Melalui Peran Pemasyarakatan",
+                  "Mewujudkan Penyelenggaraan Pemasyarakatan yang Profesional dalam Mendukung Penegakan Hukum Berbasis Hak Asasi Manusia yang Berkeadilan",
+                  "Melaksanakan Tata Laksana Pemerintahan yang Baik Melalui Reformasi Birokrasi"
+                ].map((item, idx) => (
+                  <li key={idx} className="flex gap-3 items-start">
+                    <div className="w-6 h-6 rounded-full bg-[#E8C84A]/20 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="font-bold text-sm text-[#00223D]">{idx + 1}</span>
+                    </div>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <h2 className="text-2xl font-bold text-[#00223D] mb-4">Misi</h2>
-            <ul className="space-y-4 text-gray-700">
-              {[
-                "Menyelenggarakan pembinaan narapidana dan pelayanan tahanan dengan menjunjung tinggi HAM.",
-                "Meningkatkan keamanan dan ketertiban lapas/rutan/bapas.",
-                "Mengoptimalkan pengelolaan benda sitaan dan barang rampasan negara.",
-                "Memperkuat sinergitas dengan instansi penegak hukum dan pemerintah daerah."
-              ].map((item, idx) => (
-                <li key={idx} className="flex gap-3 items-start">
-                  <CheckCircle2 className="text-green-600 shrink-0 mt-1" size={20} />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
           </div>
         </section>
         {/* Tugas dan Fungsi */}
@@ -101,24 +103,30 @@ export default function TentangPage() {
           </div>
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
             <p className="text-gray-700 mb-8 text-center max-w-3xl mx-auto">
-              Sesuai dengan peraturan perundang-undangan, Kantor Wilayah Kementerian Hukum dan HAM (Divisi Pemasyarakatan) memiliki tugas melaksanakan sebagian tugas pokok Kementerian Hukum dan HAM di wilayah provinsi Kalimantan Timur.
+              Berdasarkan Pasal 4 Undang-Undang Nomor 22 Tahun 2022 tentang Pemasyarakatan, penyelenggaraan sistem pemasyarakatan mencakup 6 fungsi utama:
             </p>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 md:grid-rows-3 md:grid-flow-col gap-6">
               {[
-                "Pelaksanaan kebijakan teknis di bidang pemasyarakatan.",
-                "Pembinaan dan pengendalian pelaksanaan tugas Unit Pelaksana Teknis (UPT) Pemasyarakatan.",
-                "Pelaksanaan bimbingan kemasyarakatan dan pengentasan anak.",
-                "Perawatan tahanan dan pengelolaan benda sitaan negara.",
-                "Fasilitasi dan evaluasi pelaksanaan tugas di wilayah kerja.",
-                "Koordinasi dengan instansi vertikal dan daerah terkait."
-              ].map((tugas, idx) => (
-                <div key={idx} className="flex gap-4 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
-                  <div className="w-8 h-8 rounded-full bg-[#E8C84A]/20 flex items-center justify-center shrink-0">
-                    <span className="font-bold text-[#00223D]">{idx + 1}</span>
+                "Pelayanan: Pemenuhan hak dasar dan perlindungan bagi tahanan dan anak pada proses peradilan.",
+                "Pembinaan: Kegiatan untuk memulihkan kesadaran, mengembangkan potensi, dan memperbaiki kualitas warga binaan.",
+                "Pembimbingan Kemasyarakatan: Pendampingan dan pengawasan terhadap klien pemasyarakatan yang menjalani integrasi sosial.",
+                "Perawatan: Pemeliharaan kesehatan fisik dan mental bagi tahanan dan narapidana.",
+                "Pengamanan: Menjaga keamanan, ketertiban, dan pencegahan gangguan di dalam maupun luar fasilitas pemasyarakatan.",
+                "Pengamatan: Pengamatan dan penilaian berkala terhadap perilaku dan perkembangan warga binaan."
+              ].map((tugas, idx) => {
+                const [title, ...descArr] = tugas.split(':');
+                const desc = descArr.join(':');
+                return (
+                  <div key={idx} className="flex gap-4 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-[#E8C84A]/20 flex items-center justify-center shrink-0">
+                      <span className="font-bold text-[#00223D]">{idx + 1}</span>
+                    </div>
+                    <p className="text-gray-700">
+                      {desc ? <><span className="font-bold text-[#00223D]">{title}:</span>{desc}</> : title}
+                    </p>
                   </div>
-                  <p className="text-gray-700">{tugas}</p>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </section>
@@ -147,7 +155,7 @@ export default function TentangPage() {
               {/* Level 2 */}
               <div className="flex justify-center mb-10">
                 <div className="bg-[#082D4B] text-white px-8 py-4 rounded-xl shadow-md border-b-4 border-[#E8C84A] text-center w-64">
-                  <p className="font-bold">Kepala Divisi Pemasyarakatan</p>
+                  <p className="font-bold">Kepala Bagian Tata Usaha dan Umum</p>
                 </div>
               </div>
 
@@ -160,19 +168,19 @@ export default function TentangPage() {
                 <div className="relative flex flex-col items-center">
                   <div className="w-0.5 h-6 bg-gray-300 absolute -top-6" />
                   <div className="bg-white border-2 border-[#00223D] text-[#00223D] px-4 py-3 rounded-lg shadow-sm text-center w-48 hover:bg-gray-50 transition">
-                    <p className="font-semibold text-sm">Bidang Pembinaan, Bimbingan & TI</p>
+                    <p className="font-semibold text-sm">Bidang Pelayanan dan Pembinaan</p>
                   </div>
                 </div>
                 <div className="relative flex flex-col items-center">
                   <div className="w-0.5 h-6 bg-gray-300 absolute -top-6" />
                   <div className="bg-white border-2 border-[#00223D] text-[#00223D] px-4 py-3 rounded-lg shadow-sm text-center w-48 hover:bg-gray-50 transition">
-                    <p className="font-semibold text-sm">Bidang Pelayanan Tahanan & Basan</p>
+                    <p className="font-semibold text-sm">Bidang Pembimbingan Kemasyarakatan</p>
                   </div>
                 </div>
                 <div className="relative flex flex-col items-center">
                   <div className="w-0.5 h-6 bg-gray-300 absolute -top-6" />
                   <div className="bg-white border-2 border-[#00223D] text-[#00223D] px-4 py-3 rounded-lg shadow-sm text-center w-48 hover:bg-gray-50 transition">
-                    <p className="font-semibold text-sm">Unit Pelaksana Teknis (UPT)</p>
+                    <p className="font-semibold text-sm">Bidang Perawatan, Pengamanan, dan Kepatuhan Internal</p>
                   </div>
                 </div>
               </div>
@@ -204,7 +212,7 @@ export default function TentangPage() {
 
               <div className="space-y-4 text-white/80 leading-relaxed text-justify">
                 <p>
-                  Lahir di (Nama Kota), beliau telah mendedikasikan sebagian besar karirnya untuk Kementerian Hukum dan HAM Republik Indonesia, khususnya pada Direktorat Jenderal Pemasyarakatan.
+                  Lahir di (Nama Kota), beliau telah mendedikasikan sebagian besar karirnya untuk Kementerian Imigrasi dan Pemasyarakatan Republik Indonesia, khususnya pada Direktorat Jenderal Pemasyarakatan.
                 </p>
                 <p>
                   Berkomitmen kuat untuk mewujudkan birokrasi yang bersih dan melayani, serta berfokus pada pendekatan humanis dalam proses pemasyarakatan dan reintegrasi sosial warga binaan pemasyarakatan di wilayah Kalimantan Timur.

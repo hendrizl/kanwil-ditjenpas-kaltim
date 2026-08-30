@@ -23,6 +23,10 @@ export default function Navbar() {
     const onScroll = () => {
       setScrolled(window.scrollY > 50);
     };
+    
+    // Check scroll position immediately on mount
+    onScroll();
+    
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
