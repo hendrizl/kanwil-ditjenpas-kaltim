@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <title>Peta UPT Pemasyarakatan — Kanwil Kalimantan Timur</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    :root {
+      --navy: #1a2e44;
+      --blue: #1b4f72;
+      --gold: #c9a227;
+      --gold2: #e8c84a;
+      --light: #f0f4f8;
+      --white: #ffffff;
+      --sidebar-bg: #1e3a52;
+      --sidebar-border: rgba(201, 162, 39, 0.25);
+      --item-hover: rgba(201, 162, 39, 0.1);
+      --item-active: rgba(201, 162, 39, 0.18);
+      --text-dim: rgba(240, 244, 248, 0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Barlow', sans-serif;
+      background: var(--navy);
+      color: var(--light);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #0f2035 0%, #1b3a5c 60%, #0f2035 100%);
+      border-bottom: 3px solid var(--gold);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      z-index: 10;
+      transition: all 0.3s ease;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(201, 162, 39, .1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .logo-shield {
+      width: 1.6em;
+      height: 1.6em;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      background-image: url('assets/kemimipas-logo.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .logo-shield::after {
+      content: '';
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .header-text h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: .5px;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .header-text p {
+      font-size: .7rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .title-mobile {
+      display: none;
+    }
+
+    .subtitle-mobile {
+      display: none;
+    }
+
+    .header-stats {
+      margin-left: auto;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .stat-box {
+      text-align: center;
+    }
+
+    .stat-box .num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--gold2);
+      line-height: 1;
+    }
+
+    .stat-box .lbl {
+      font-size: .6rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    /* ── MAP FILLS REMAINING SPACE ── */
+    .main {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       FLOATING ACTION BUTTON (FAB) SEARCH - BOTTOM CENTER
+    ══════════════════════════════════════════════════════ */
+    #searchToggle {
+      position: absolute;
+      bottom: 24px;
+      left: 14px;
+      transform: translateX(0) scale(1);
+      z-index: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: var(--gold);
+      color: #0f2035;
+      border-radius: 14px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+      transition: background .2s, box-shadow .2s, transform .15s;
+    }
+
+    #searchToggle:active {
+      transform: scale(.95);
+    }
+
+    #searchToggle .arrow {
+      transition: transform .25s;
+      display: inline-block;
+      font-style: normal;
+    }
+
+    #searchToggle.open .arrow {
+      transform: rotate(180deg);
+    }
+
+    #searchToggle.open {
+      background: var(--gold2);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SLIDE-UP SEARCH PANEL (BOTTOM CENTERED)
+    ══════════════════════════════════════════════════════ */
+    #searchPanel {
+      position: absolute;
+      bottom: 85px;
+      left: 50%;
+      width: min(340px, calc(100vw - 28px));
+      z-index: 799;
+      background: var(--sidebar-bg);
+      border: 1px solid var(--sidebar-border);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+
+      /* Animasi dari bawah */
+      max-height: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(20px);
+      transform-origin: bottom center;
+      transition: max-height .32s ease, opacity .25s ease, transform .25s ease;
+    }
+
+    #searchPanel.open {
+      max-height: min(65vh, 500px);
+      opacity: 1;
+      pointer-events: all;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .panel-inner {
+      padding: 14px 12px 8px;
+      border-bottom: 1px solid var(--sidebar-border);
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 10px 12px 10px 34px;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(201, 162, 39, .35);
+      border-radius: 8px;
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-size: .9rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .search-wrap input::placeholder {
+      color: rgba(255, 255, 255, .4);
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--gold);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(201, 162, 39, .8);
+      font-size: 14px;
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .pill {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: .66rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all .2s;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      user-select: none;
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .pill.all {
+      background: var(--gold);
+      color: #0f2035;
+      border-color: var(--gold);
+    }
+
+    .pill.lapas {
+      background: transparent;
+      color: #4a9ede;
+      border-color: #4a9ede;
+    }
+
+    .pill.rutan {
+      background: transparent;
+      color: #5c2f1e;
+      border-color: #5c2f1e;
+    }
+
+    .pill.lpp {
+      background: transparent;
+      color: #e882b0;
+      border-color: #e882b0;
+    }
+
+    .pill.lpka {
+      background: transparent;
+      color: #a78bfa;
+      border-color: #a78bfa;
+    }
+
+    .pill.lpn {
+      background: transparent;
+      color: #2ec48a;
+      border-color: #2ec48a;
+    }
+
+    .pill.bapas {
+      background: transparent;
+      color: #fb923c;
+      border-color: #fb923c;
+    }
+
+    .pill.kanwil {
+      background: transparent;
+      color: #f87171;
+      border-color: #f87171;
+    }
+
+    .pill:not(.active) {
+      opacity: .4;
+    }
+
+    .pill.active {
+      opacity: 1;
+    }
+
+    #facilityList {
+      overflow-y: auto;
+      max-height: min(45vh, 340px);
+    }
+
+    #facilityList::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    #facilityList::-webkit-scrollbar-thumb {
+      background: rgba(201, 162, 39, .4);
+      border-radius: 2px;
+    }
+
+    .facility-item {
+      padding: 12px 14px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all .15s;
+      border-bottom: 1px solid rgba(255, 255, 255, .04);
+    }
+
+    .facility-item:active,
+    .facility-item:hover {
+      background: var(--item-hover);
+      border-left-color: var(--gold);
+    }
+
+    .facility-item.active {
+      background: var(--item-active);
+      border-left-color: var(--gold2);
+    }
+
+    .facility-item.hidden {
+      display: none;
+    }
+
+    .fi-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .fi-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .fi-icon.lapas {
+      background: rgba(74, 158, 222, .18);
+      color: #4a9ede;
+    }
+
+    .fi-icon.rutan {
+      background: rgba(232, 148, 58, .18);
+      color: #5c2f1e;
+    }
+
+    .fi-icon.lpp {
+      background: rgba(232, 130, 176, .18);
+      color: #e882b0;
+    }
+
+    .fi-icon.lpka {
+      background: rgba(167, 139, 250, .18);
+      color: #a78bfa;
+    }
+
+    .fi-icon.lpn {
+      background: rgba(46, 196, 138, .18);
+      color: #2ec48a;
+    }
+
+    .fi-icon.bapas {
+      background: rgba(251, 146, 60, .18);
+      color: #fb923c;
+    }
+
+    .fi-icon.kanwil {
+      background: rgba(248, 113, 113, .18);
+      color: #f87171;
+    }
+
+    /* Per-facility photo inside the icon box */
+    .fi-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
+
+    /* When a photo is present, hide the tinted background */
+    .fi-icon.has-photo {
+      background: transparent;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .fi-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .fi-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .fi-city {
+      font-size: .7rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .fi-badge {
+      font-size: .6rem;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .fi-badge.lapas {
+      background: rgba(74, 158, 222, .2);
+      color: #4a9ede;
+    }
+
+    .fi-badge.rutan {
+      background: rgba(232, 148, 58, .2);
+      color: #5c2f1e;
+    }
+
+    .fi-badge.lpp {
+      background: rgba(232, 130, 176, .2);
+      color: #e882b0;
+    }
+
+    .fi-badge.lpka {
+      background: rgba(167, 139, 250, .2);
+      color: #a78bfa;
+    }
+
+    .fi-badge.lpn {
+      background: rgba(46, 196, 138, .2);
+      color: #2ec48a;
+    }
+
+    .fi-badge.bapas {
+      background: rgba(251, 146, 60, .2);
+      color: #fb923c;
+    }
+
+    .fi-badge.kanwil {
+      background: rgba(248, 113, 113, .2);
+      color: #f87171;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       NATIVE LEAFLET POPUP STYLING
+    ══════════════════════════════════════════════════════ */
+    .leaflet-popup-content-wrapper {
+      background: #ffffff !important;
+      border: none !important;
+      border-radius: 16px !important;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25) !important;
+      padding: 0 !important;
+      overflow: hidden;
+    }
+
+    .leaflet-popup-content {
+      margin: 0 !important;
+      width: 290px !important;
+    }
+
+    .leaflet-popup-tip {
+      background: #ffffff !important;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .leaflet-popup-close-button {
+      color: #999 !important;
+      font-size: 22px !important;
+      top: 10px !important;
+      right: 14px !important;
+      z-index: 10;
+    }
+
+    .popup-card {
+      font-family: 'Barlow', sans-serif;
+      color: #1a1a2e;
+    }
+
+    .popup-header {
+      padding: 14px 40px 12px 16px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .popup-type-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .popup-type-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .popup-type-text {
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: #666;
+    }
+
+    .popup-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #1a1a2e;
+      line-height: 1.2;
+    }
+
+    .popup-body {
+      padding: 12px 16px 20px;
+    }
+
+    .popup-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-bottom: 8px;
+      font-size: .82rem;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .popup-row .icon {
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .popup-row strong {
+      color: #1a1a2e;
+    }
+
+    .popup-social {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+    }
+
+    .popup-social-title {
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: #888;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .social-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: transform .15s, box-shadow .15s;
+      flex-shrink: 0;
+    }
+
+    .social-btn:active {
+      transform: scale(.9);
+    }
+
+    .social-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .social-btn.instagram {
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    }
+
+    .social-btn.facebook {
+      background: #1877f2;
+    }
+
+    .social-btn.twitter {
+      background: #000;
+    }
+
+    .social-btn.youtube {
+      background: #f00;
+    }
+
+    .social-btn.tiktok {
+      background: #010101;
+    }
+
+    .social-btn.whatsapp {
+      background: #25d366;
+    }
+
+    .social-btn.placeholder {
+      background: #e0e0e0;
+      cursor: default;
+    }
+
+    .gmaps-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      margin-top: 14px;
+      background: #4285f4;
+      border-radius: 9px;
+      padding: 10px;
+      color: #fff !important;
+      font-size: .82rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: .3px;
+      transition: background .2s;
+    }
+
+    .gmaps-btn:active {
+      background: #3367d6;
+    }
+
+    .gmaps-btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    /* PIN ANIMATION */
+    @keyframes pinPulse {
+      0% {
+        transform: scale(1);
+      }
+
+      40% {
+        transform: scale(1.25);
+      }
+
+      70% {
+        transform: scale(0.95);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .pin-active-wrap {
+      animation: pinPulse .4s ease forwards;
+    }
+
+    /* ── POPUP FADE + SLIDE IN (triggered via JS, not CSS, to prevent double-fire) ── */
+    @keyframes popupAppear {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .leaflet-popup-content-wrapper.popup-animate {
+      animation: popupAppear 0.28s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+    }
+
+    .leaflet-popup-tip-container.popup-animate {
+      animation: popupAppear 0.28s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+      animation-delay: 0.05s !important;
+    }
+
+    /* ── SOCIAL ICONS STAGGER IN ── */
+    @keyframes socialPop {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.65);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .social-icons .social-btn {
+      opacity: 0;
+      animation: socialPop 0.24s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .social-icons .social-btn:nth-child(1) {
+      animation-delay: 0.18s;
+    }
+
+    .social-icons .social-btn:nth-child(2) {
+      animation-delay: 0.24s;
+    }
+
+    .social-icons .social-btn:nth-child(3) {
+      animation-delay: 0.30s;
+    }
+
+    .social-icons .social-btn:nth-child(4) {
+      animation-delay: 0.36s;
+    }
+
+    .social-icons .social-btn:nth-child(5) {
+      animation-delay: 0.42s;
+    }
+
+    .social-icons .social-btn:nth-child(6) {
+      animation-delay: 0.48s;
+    }
+
+    /* ── SKELETON SHIMMER (loading state) ── */
+    @keyframes shimmer {
+      0% {
+        background-position: -400px 0;
+      }
+
+      100% {
+        background-position: 400px 0;
+      }
+    }
+
+    .skel {
+      background: linear-gradient(90deg,
+          rgba(255, 255, 255, 0.04) 25%,
+          rgba(255, 255, 255, 0.11) 50%,
+          rgba(255, 255, 255, 0.04) 75%);
+      background-size: 800px 100%;
+      animation: shimmer 1.6s infinite linear;
+      border-radius: 6px;
+    }
+
+    /* ── LIST ITEM SLIDE-IN (cascade on panel open) ── */
+    @keyframes listItemSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .facility-item.fi-slide-in {
+      animation: listItemSlideIn 0.26s ease forwards;
+    }
+
+    /* ── SMOOTH FILTER TRANSITION ── */
+    .facility-item {
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .facility-item.fi-invisible {
+      opacity: 0 !important;
+      transform: translateX(-6px) !important;
+      pointer-events: none;
+    }
+
+    /* ── RESPONSIVE MOBILE FIXES ── */
+    @media(max-width:640px) {
+      header {
+        padding: 6px 14px;
+        gap: 10px;
+      }
+
+      .logo-shield {
+        width: 2.2em;
+        height: 2.2em;
+        background-size: contain;
+      }
+
+      .logo-shield::after {
+        content: '';
+      }
+
+      .title-mobile {
+        display: none;
+      }
+
+      .header-stats {
+        display: none !important;
+      }
+
+      .title-desktop {
+        font-size: .85rem !important;
+      }
+
+      .subtitle-desktop {
+        font-size: .6rem;
+      }
+    }
+
+    /* ── RESET ZOOM BUTTON (Bottom Right) ── */
+    #resetZoomBtn {
+      position: absolute;
+      bottom: 24px;
+      right: 14px;
+      z-index: 800;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      width: 48px;
+      height: 48px;
+      background: var(--navy);
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      border-radius: 14px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+      transition: background .2s, transform .15s, border-color .2s;
+    }
+
+    #resetZoomBtn:active {
+      transform: scale(.92);
+      background: var(--sidebar-bg);
+    }
+
+    #resetZoomBtn .rzoom-icon {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    #resetZoomBtn .rzoom-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      line-height: 1;
+    }
+
+    /* ── CITY CLUSTER COMPACT (Hanya Angka) ── */
+    .city-cluster-compact {
+      background: var(--navy);
+      border: 2.5px solid var(--gold);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold2);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.2s, color 0.2s;
+    }
+
+    .city-cluster-compact:active {
+      transform: scale(0.85);
+      background: var(--sidebar-bg);
+    }
+
+    .city-cluster-compact:hover {
+      border-color: var(--white);
+      color: var(--white);
+    }
+
+    /* ── TOOLTIP STYLE (Nama Kota Muncul Saat Hover) ── */
+    .cluster-tooltip {
+      background: var(--navy);
+      color: var(--gold2);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: .85rem;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      padding: 4px 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .leaflet-tooltip-top.cluster-tooltip::before {
+      border-top-color: var(--gold);
+    }
+
+    /* Leaflet UI Overrides */
+    .leaflet-control-zoom {
+      margin-top: 14px !important;
+      margin-right: 14px !important;
+    }
+
+    /* ── LEGEND ── */
+    #legendBtn {
+      position: absolute;
+      bottom: 84px;
+      right: 14px;
+      z-index: 800;
+      width: 48px;
+      height: 48px;
+      background: var(--navy);
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      border-radius: 14px;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 2px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+      transition: background .2s, transform .15s;
+    }
+
+    #legendBtn:active {
+      transform: scale(.92);
+    }
+
+    #legendBtn .lb-icon {
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    #legendBtn .lb-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      line-height: 1;
+    }
+
+    #legendPanel {
+      position: absolute;
+      bottom: 144px;
+      right: 14px;
+      z-index: 799;
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: 14px;
+      padding: 12px 14px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      min-width: 148px;
+      transform: scale(0.9) translateY(8px);
+      transform-origin: bottom right;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    #legendPanel.open {
+      opacity: 1;
+      pointer-events: all;
+      transform: scale(1) translateY(0);
+    }
+
+    .leg-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: #1a2e44;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .leg-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: .75rem;
+      color: #333;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    .leg-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .leg-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 2px solid white;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo-shield"></div>
+    <div class="header-text">
+      <h1 class="title-desktop">NAVIPAS</h1>
+      <p class="subtitle-desktop">Navigasi dan Informasi Wilayah Kerja Pemasyarakatan</p>
+      <h1 class="title-mobile">Ditjenpas Kaltim</h1>
+    </div>
+    <div class="header-stats">
+      <!-- ID ditambahkan di sini agar JS bisa update angka secara otomatis -->
+      <div class="stat-box">
+        <!-- <div class="num" id="shown-count">0</div>
+        <div class="lbl">Tampil</div> -->
+      </div>
+      <div class="stat-box">
+        <div class="num" id="total-count">0</div>
+        <div class="lbl">Total UPT</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+    <div id="map"></div>
+
+    <!-- FAB Search Button (Bottom Left) -->
+    <div id="searchToggle">🔍</div>
+
+    <!-- Reset Zoom Button (Bottom Right) -->
+    <div id="resetZoomBtn" title="Reset Tampilan">
+      <span class="rzoom-icon">⊙</span>
+      <span class="rzoom-label">Reset</span>
+    </div>
+
+    <!-- Legend Button -->
+    <div id="legendBtn">
+      <span class="lb-icon">🗺</span>
+      <span class="lb-label">Info</span>
+    </div>
+
+    <!-- Legend Panel -->
+    <div id="legendPanel">
+      <div class="leg-title">Keterangan Warna</div>
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#4a9ede"></div>Lapas
+      </div>
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#5c2f1e"></div>Rutan
+      </div>
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#e882b0"></div>LPP (Perempuan)
+      </div>
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#a78bfa"></div>LPKA (Anak)
+      </div>
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#2ec48a"></div>LPN (Narkotika)
+      </div>
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#fb923c"></div>Bapas
+      </div>
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#f87171"></div>Kanwil
+      </div>
+    </div>
+
+    <!-- Slide-up search panel -->
+    <div id="searchPanel">
+      <div class="panel-inner">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Cari nama UPT" autocomplete="off" autocorrect="off"
+            autocapitalize="off" spellcheck="false" />
+        </div>
+        <div class="filter-pills">
+          <span class="pill all active" data-filter="all">Semua</span>
+          <span class="pill lapas" data-filter="lapas">Lapas</span>
+          <span class="pill rutan" data-filter="rutan">Rutan</span>
+          <span class="pill lpp" data-filter="lpp">LPP</span>
+          <span class="pill lpka" data-filter="lpka">LPKA</span>
+          <span class="pill lpn" data-filter="lpn">LPN</span>
+          <span class="pill bapas" data-filter="bapas">Bapas</span>
+          <span class="pill kanwil" data-filter="kanwil">Kanwil</span>
+        </div>
+      </div>
+      <div id="facilityList"></div>
+    </div>
+  </div>
+
+  <script>
+    // ── SVG ICONS ─────────────────────────────────────────────────────────────
+    const SVG = {
+      instagram: `<svg viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`,
+      facebook: `<svg viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
+      twitter: `<svg viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+      youtube: `<svg viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
+      tiktok: `<svg viewBox="0 0 24 24" fill="white"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>`,
+      whatsapp: `<svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`,
+      placeholder: `<svg viewBox="0 0 24 24" fill="#aaa"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`,
+      gmaps: `<svg viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+    };
+
+    // ── GOOGLE SHEETS → PAPAPARSE ──────────────────────────────────────────────
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSKueAYOMUQ5THbJF-k6cE52r2b3RGBgc1OTOv9_kSqkfTmaEfo3yCxB35ZoLsf-6INvXuQiHMBvKgK/pub?output=csv';
+    const PHOTO_BASE_URL = 'https://raw.githubusercontent.com/AjiDanang13/Peta-Kerja-Kaltim/main/assets/photos/';
+
+    let facilities = [];
+
+    function rowToFacility(row) {
+      const cleanRow = {};
+      Object.keys(row).forEach(key => {
+        cleanRow[key.trim().toLowerCase()] = row[key];
+      });
+
+      // Fitur Otomatis Foto: Parse string nama gambar atau link http
+      const rawPhoto = cleanRow['photo'] ? cleanRow['photo'].trim() : null;
+      let finalPhoto = null;
+      if (rawPhoto) {
+        finalPhoto = rawPhoto.startsWith('http') ? rawPhoto : PHOTO_BASE_URL + rawPhoto;
+      }
+
+      return {
+        id: parseInt(cleanRow['id']),
+        name: (cleanRow['name'] || '').trim(),
+        type: (cleanRow['type'] || '').trim().toLowerCase(),
+        city: (cleanRow['city'] || '').trim(),
+        phone: (cleanRow['phone'] || '—').trim(),
+        lat: parseFloat(cleanRow['lat']),
+        lng: parseFloat(cleanRow['lng']),
+        visitHours: (cleanRow['visithours'] || cleanRow['hours'] || '').replace(/\|/g, '<br>').trim(),
+        gmapsQuery: (cleanRow['gmapsquery'] || '').trim(),
+        photo: finalPhoto, // Disambungkan ke foto otomatis
+        social: {
+          instagram: (cleanRow['instagram'] || '').trim() || null,
+          facebook: (cleanRow['facebook'] || '').trim() || null,
+          twitter: (cleanRow['twitter'] || '').trim() || null,
+          youtube: (cleanRow['youtube'] || '').trim() || null,
+          tiktok: (cleanRow['tiktok'] || '').trim() || null,
+          whatsapp: (cleanRow['whatsapp'] || '').trim() || null,
+        }
+      };
+    }
+
+    // ── LOADING SCREEN (Animasi Asli NAVIPAS dikembalikan) ──────────────────────
+    const loadingEl = document.createElement('div');
+    Object.assign(loadingEl.style, {
+      position: 'fixed', inset: '0', zIndex: '99999',
+      background: '#0f2035',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      flexDirection: 'column', gap: '0',
+      transition: 'opacity .5s ease',
+    });
+    loadingEl.innerHTML = `
+  <style>
+    @keyframes _navipulse {
+      0%   { opacity: 0.15; letter-spacing: 6px; }
+      50%  { opacity: 1;    letter-spacing: 10px; }
+      100% { opacity: 0.15; letter-spacing: 6px; }
+    }
+    @keyframes _lineGrow {
+      0%,100% { width: 20px; opacity: 0.3; }
+      50%      { width: 80px; opacity: 1; }
+    }
+    @keyframes _subFade {
+      0%,100% { opacity: 0.2; }
+      50%      { opacity: 0.7; }
+    }
+    ._navi-word {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size: 2.8rem; font-weight: 800;
+      color: #e8c84a;
+      letter-spacing: 10px;
+      text-transform: uppercase;
+      animation: _navipulse 2s ease-in-out infinite;
+    }
+    ._navi-line {
+      height: 2px; background: #c9a227; border-radius: 1px;
+      margin: 8px auto 10px;
+      animation: _lineGrow 2s ease-in-out infinite;
+    }
+    ._navi-sub {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size: 0.55rem; color: rgba(240,244,248,0.5);
+      letter-spacing: 1.5px; text-transform: uppercase;
+      text-align: center; max-width: 240px;
+      animation: _subFade 2s ease-in-out infinite;
+    }
+  </style>
+  <div class="_navi-word">NAVIPAS</div>
+  <div class="_navi-line"></div>
+  <div class="_navi-sub">Navigasi dan Informasi Wilayah Kerja<br>Pemasyarakatan KALTIM</div>
+`;
+    document.body.appendChild(loadingEl);
+
+    // ── BOOT VIA PAPAPARSE ─────────────────────────────────────────────────────
+    const _pp = document.createElement('script');
+    _pp.src = 'https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js';
+    _pp.onload = () => {
+      Papa.parse(SHEET_URL, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete(results) {
+          facilities = results.data
+            .map(rowToFacility)
+            .filter(f => f.id && !isNaN(f.lat) && !isNaN(f.lng));
+
+          // Fitur Otomatis Angka Total UPT
+          document.getElementById('total-count').textContent = facilities.length;
+          document.getElementById('shown-count').textContent = facilities.length;
+
+          loadingEl.style.opacity = '0';
+          setTimeout(() => loadingEl.remove(), 500);
+          initMap();
+        },
+        error(err) {
+          loadingEl.innerHTML = `
+        <div style="text-align:center;padding:24px;max-width:280px;">
+          <div style="font-size:2rem;margin-bottom:10px;">⚠️</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;
+            font-weight:700;color:#f87171;margin-bottom:8px;">Gagal Memuat Data</div>
+          <div style="font-size:.78rem;color:rgba(240,244,248,.6);margin-bottom:16px;">
+            ${err.message || 'Periksa koneksi internet dan pastikan sheet sudah di-publish.'}</div>
+          <button onclick="location.reload()" style="padding:8px 22px;background:#c9a227;
+            color:#0f2035;border:none;border-radius:20px;font-weight:700;cursor:pointer;
+            font-family:'Barlow Condensed',sans-serif;font-size:.9rem;text-transform:uppercase;">
+            Coba Lagi</button>
+        </div>`;
+        }
+      });
+    };
+    document.head.appendChild(_pp);
+
+    // ── TYPE CONFIG ────────────────────────────────────────────────────────────
+    function initMap() {
+      const typeConfig = {
+        lapas: { color: '#4a9ede', label: 'LAPAS', letter: 'L' },
+        rutan: { color: '#5c2f1e', label: 'RUTAN', letter: 'R' },
+        lpp: { color: '#e882b0', label: 'LPP', letter: '♀' },
+        lpka: { color: '#a78bfa', label: 'LPKA', letter: 'A' },
+        lpn: { color: '#2ec48a', label: 'LPN', letter: 'N' },
+        bapas: { color: '#fb923c', label: 'BAPAS', letter: 'B' },
+        kanwil: { color: '#f87171', label: 'KANWIL', letter: 'K' },
+        fallback: { color: '#888', label: 'LAINNYA', letter: '?' } // Mencegah Peta Blank jika salah ketik Type
+      };
+      const typeLabel = {
+        lapas: 'Lembaga Pemasyarakatan', rutan: 'Rumah Tahanan Negara',
+        lpp: 'Lapas Perempuan', lpka: 'Lapas Pembinaan Khusus Anak',
+        lpn: 'Lapas Narkotika', bapas: 'Balai Pemasyarakatan', kanwil: 'Kantor Wilayah',
+      };
+
+      // ── MAKE PIN ICON ────────────────────────────────────────────
+      function makeIcon(f, active = false) {
+        const c = typeConfig[f.type] || typeConfig.fallback;
+        const W = active ? 48 : 36;
+        const TH = active ? 12 : 9;
+        const bw = active ? 3 : 2;
+        const photo = f.photo; // Memakai foto otomatis dari spreadsheet
+
+        const inner = photo
+          ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"
+           onerror="this.style.display='none';this.nextSibling.style.display='flex'"/>
+       <span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;
+           font-weight:800;font-size:${active ? 15 : 11}px;color:white;
+           font-family:'Barlow Condensed',sans-serif;">${c.letter}</span>`
+          : `<span style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;
+           font-weight:800;font-size:${active ? 15 : 11}px;color:white;
+           font-family:'Barlow Condensed',sans-serif;">${c.letter}</span>`;
+
+        const pulse = active
+          ? `<div style="position:absolute;top:${-(bw + 5)}px;left:${-(bw + 5)}px;
+          width:${W + (bw + 5) * 2}px;height:${W + (bw + 5) * 2}px;
+          border-radius:50%;border:3px solid ${c.color};opacity:.4;
+          pointer-events:none;animation:pinPulse .4s ease forwards;"></div>` : '';
+
+        const html = `<div class="${active ? 'pin-active-wrap' : ''}" style="
+      position:relative;width:${W}px;height:${W + TH}px;
+      filter:drop-shadow(0 3px 6px rgba(0,0,0,0.3));">
+    ${pulse}
+    <div style="position:absolute;top:0;left:0;width:${W}px;height:${W}px;
+        border-radius:50%;background:${c.color};border:${bw}px solid ${c.color};
+        outline:${bw}px solid white;outline-offset:-${bw * 2}px;
+        box-sizing:border-box;overflow:hidden;
+        display:flex;align-items:center;justify-content:center;">${inner}</div>
+    <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+        width:0;height:0;
+        border-left:${Math.round(W * .18)}px solid transparent;
+        border-right:${Math.round(W * .18)}px solid transparent;
+        border-top:${TH}px solid ${c.color};"></div>
+  </div>`;
+
+        return L.divIcon({ html, className: '', iconSize: [W, W + TH], iconAnchor: [W / 2, W + TH], popupAnchor: [0, -(W + TH + 4)] });
+      }
+
+      // ── SOCIAL ICONS HTML ──────────────────────────────────────────────────────
+      function socialIconsHtml(social) {
+        return [
+          { key: 'instagram', cls: 'instagram', title: 'Instagram' },
+          { key: 'facebook', cls: 'facebook', title: 'Facebook' },
+          { key: 'twitter', cls: 'twitter', title: 'X (Twitter)' },
+          { key: 'youtube', cls: 'youtube', title: 'YouTube' },
+          { key: 'tiktok', cls: 'tiktok', title: 'TikTok' },
+          { key: 'whatsapp', cls: 'whatsapp', title: 'WhatsApp' },
+        ].map(p => {
+          const url = social[p.key];
+          return url
+            ? `<a class="social-btn ${p.cls}" href="${url}" target="_blank" title="${p.title}">${SVG[p.key]}</a>`
+            : `<span class="social-btn placeholder" title="${p.title} (segera hadir)">${SVG.placeholder}</span>`;
+        }).join('');
+      }
+
+      // ── POPUP CONTENT BUILDER ──────────────────────────────────────────────────
+      function buildPopupContent(f) {
+        const cfg = typeConfig[f.type] || typeConfig.fallback;
+        const isIOS = /iP(hone|od|ad)/.test(navigator.userAgent);
+        const isAndroid = /Android/.test(navigator.userAgent);
+        let gurl;
+        if (isIOS) {
+          gurl = `comgooglemaps://?q=${encodeURIComponent(f.gmapsQuery)}&center=${f.lat},${f.lng}`;
+        } else if (isAndroid) {
+          gurl = `geo:${f.lat},${f.lng}?q=${encodeURIComponent(f.gmapsQuery)}`;
+        } else {
+          gurl = `https://www.google.com/maps/search/${encodeURIComponent(f.gmapsQuery)}`;
+        }
+        const hrs = f.visitHours;
+        return `<div class="popup-card">
+    <div class="popup-header">
+      <div class="popup-type-row">
+        <div class="popup-type-dot" style="background:${cfg.color}"></div>
+        <span class="popup-type-text">${typeLabel[f.type] || typeLabel.fallback} · ${f.city}</span>
+      </div>
+      <div class="popup-name">${f.name}</div>
+    </div>
+    <div class="popup-body">
+      <div class="popup-row"><span class="icon">📞</span><span>${f.phone}</span></div>
+      <div class="popup-row"><span class="icon">🕐</span><span><strong>Jam Pelayanan:</strong><br>${hrs}</span></div>
+      <div class="popup-social">
+        <div class="popup-social-title">Media Sosial</div>
+        <div class="social-icons">${socialIconsHtml(f.social)}</div>
+      </div>
+      <a class="gmaps-btn" href="${gurl}" target="_blank">${SVG.gmaps} Buka di Google Maps</a>
+    </div>
+  </div>`;
+      }
+
+      // ── MAP INIT ───────────────────────────────────────────────────────────────
+      const BOUNDS = L.latLngBounds(L.latLng(-2.8, 114.5), L.latLng(5.2, 119.2));
+
+      const map = L.map('map', {
+        zoomControl: false, minZoom: 6.5, maxZoom: 18,
+        maxBounds: BOUNDS, maxBoundsViscosity: 1.0,
+        tap: true,
+      });
+
+      L.control.zoom({ position: 'topright' }).addTo(map);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 20, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      // ── DYNAMIC CITY GROUPS (Logika Interpolasi Asli, tapi dibangun Otomatis) ──
+      // Fitur ini mempertahankan animasi gelembung Anda yang menyusut saat zoom out
+      // namun kini membacanya langsung dari kolom `city` di spreadsheet.
+      const cityGroupsMap = {};
+
+      // Koordinat Offset Asli Anda untuk mempertahankan posisi gelembung sempurna
+      const knownOffsets = {
+        'samarinda': { lat: -0.600, lng: 117.250 },
+        'balikpapan': { lat: -1.274, lng: 116.865 },
+        'tenggarong': { lat: -0.320, lng: 116.700 },
+        'tanah grogot': { lat: -1.879, lng: 116.176 },
+        'tanjung redeb': { lat: 2.138, lng: 117.498 },
+        'bontang': { lat: 0.056, lng: 117.460 },
+        'nunukan': { lat: 4.042, lng: 117.722 },
+        'tarakan': { lat: 3.307, lng: 117.590 }
+      };
+
+      facilities.forEach(f => {
+        const rawCity = f.city || 'Lainnya';
+        const cityKey = rawCity.toLowerCase().trim();
+        const cityLabel = rawCity.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+
+        if (!cityGroupsMap[cityKey]) {
+          cityGroupsMap[cityKey] = {
+            key: cityKey.replace(/\s+/g, '_'),
+            label: cityLabel,
+            count: 0,
+            ids: [],
+            trueLat: f.lat,
+            trueLng: f.lng,
+            // Gunakan offset lama jika ada, jika kota baru gunakan koordinat UPT
+            offsetLat: knownOffsets[cityKey] ? knownOffsets[cityKey].lat : f.lat - 0.05,
+            offsetLng: knownOffsets[cityKey] ? knownOffsets[cityKey].lng : f.lng - 0.05,
+            zoom: 14
+          };
+        }
+        cityGroupsMap[cityKey].count++;
+        cityGroupsMap[cityKey].ids.push(f.id);
+      });
+
+      const cityGroups = Object.values(cityGroupsMap);
+
+      let activeId = null;
+      const ZOOM_THRESHOLD = 11;
+
+      function makeCityGroupIcon(group) {
+        return L.divIcon({
+          html: `<div class="city-cluster-compact">${group.count}</div>`,
+          className: '', iconSize: [36, 36], iconAnchor: [18, 18]
+        });
+      }
+
+      // Inisialisasi Marker Grup
+      cityGroups.forEach(group => {
+        const m = L.marker([group.offsetLat, group.offsetLng], {
+          icon: makeCityGroupIcon(group),
+          zIndexOffset: 200,
+        }).bindTooltip(group.label, {
+          className: 'cluster-tooltip', direction: 'top', offset: [0, -18], opacity: 1
+        });
+
+        m.on('click', e => {
+          L.DomEvent.stopPropagation(e);
+          const groupFacilities = facilities.filter(f => group.ids.includes(f.id));
+          const groupBounds = L.latLngBounds(groupFacilities.map(f => [f.lat, f.lng]));
+          map.flyToBounds(groupBounds, { padding: [50, 50], maxZoom: 14, animate: true, duration: 1.0 });
+        });
+        group._marker = m;
+      });
+
+      // Inisialisasi Marker Pin
+      const markers = {};
+      facilities.forEach(f => {
+        const m = L.marker([f.lat, f.lng], { icon: makeIcon(f) })
+          .bindPopup(buildPopupContent(f), { maxWidth: 300, minWidth: 280 });
+        m.on('click', e => { L.DomEvent.stopPropagation(e); selectFacility(f.id); });
+        markers[f.id] = m;
+      });
+
+      // ── LOGIKA POSISI DINAMIS & VISIBILITAS ──
+      function updateGroupPositions() {
+        const z = map.getZoom();
+
+        // Interpolasi Posisi: Zoom 6.5 = Offset (Menjauh). Zoom 10 = Posisi Asli (True).
+        let t = (z - 6.5) / (10 - 6.5);
+        if (t < 0) t = 0;
+        if (t > 1) t = 1;
+        t = t * t * (3 - 2 * t); // Smoothstep
+
+        const showBubbles = (z < ZOOM_THRESHOLD);
+
+        cityGroups.forEach(g => {
+          // Geser posisi
+          if (g._marker) {
+            const lat = g.offsetLat * (1 - t) + g.trueLat * t;
+            const lng = g.offsetLng * (1 - t) + g.trueLng * t;
+            g._marker.setLatLng([lat, lng]);
+          }
+          // Visibilitas Bubble
+          if (showBubbles) {
+            if (!map.hasLayer(g._marker)) map.addLayer(g._marker);
+          } else {
+            if (map.hasLayer(g._marker)) map.removeLayer(g._marker);
+          }
+        });
+
+        // Visibilitas Pin Individu
+        facilities.forEach(f => {
+          const m = markers[f.id];
+          const isVisible = !showBubbles || (activeId === f.id);
+          if (isVisible) {
+            if (!map.hasLayer(m)) map.addLayer(m);
+          } else {
+            if (map.hasLayer(m)) map.removeLayer(m);
+          }
+        });
+      }
+
+      map.on('zoom', updateGroupPositions);
+      map.on('zoomend', updateGroupPositions);
+
+      // ── EVENTS ──
+      map.on('popupclose', () => {
+        if (activeId) {
+          const oldF = facilities.find(x => x.id === activeId);
+          if (oldF) markers[activeId].setIcon(makeIcon(oldF, false));
+          document.getElementById(`fi-${activeId}`)?.classList.remove('active');
+          activeId = null;
+          updateGroupPositions();
+        }
+      });
+
+      function selectFacility(id) {
+        if (activeId === id) { markers[id].openPopup(); return; }
+
+        if (activeId) map.closePopup();
+
+        activeId = id;
+        const f = facilities.find(x => x.id === id);
+
+        markers[id].setIcon(makeIcon(f, true));
+        document.getElementById(`fi-${id}`)?.classList.add('active');
+        document.getElementById(`fi-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        closeSearchPanel();
+
+        updateGroupPositions();
+
+        const zoom = Math.max(map.getZoom(), 15);
+        const pt = map.project([f.lat, f.lng], zoom).subtract([0, 150]);
+        map.once('moveend', () => markers[id].openPopup());
+        map.flyTo(map.unproject(pt, zoom), zoom, { animate: true, duration: 0.9 });
+      }
+
+      // ── SIDEBAR LIST ───────────────────────────────────────────────────────────
+      const listEl = document.getElementById('facilityList');
+
+      function renderList() {
+        listEl.innerHTML = '';
+        facilities.forEach(f => {
+          const div = document.createElement('div');
+          div.className = 'facility-item';
+          div.id = `fi-${f.id}`;
+          div.dataset.type = f.type;
+          div.dataset.name = (f.name + ' ' + f.city).toLowerCase();
+
+          // Foto otomatis dari Spreadsheet
+          const photo = f.photo;
+          const iconContent = photo
+            ? `<img src="${photo}" alt="${f.name}" loading="lazy">`
+            : '';
+          const iconClass = photo ? `fi-icon ${f.type} has-photo` : `fi-icon ${f.type}`;
+
+          div.innerHTML = `<div class="fi-top">
+      <div class="${iconClass}">${iconContent}</div>
+      <div class="fi-info">
+        <div class="fi-name">${f.name}</div>
+        <div class="fi-city">${f.city}</div>
+      </div>
+      <span class="fi-badge ${f.type}">${(typeConfig[f.type] || typeConfig.fallback).label}</span>
+    </div>`;
+          div.addEventListener('click', e => {
+            e.stopPropagation();
+            selectFacility(f.id);
+          });
+          listEl.appendChild(div);
+        });
+      }
+      renderList();
+
+      // ── LEGEND TOGGLE ──────────────────────────────────────────────────────────
+      const legendBtn = document.getElementById('legendBtn');
+      const legendPanel = document.getElementById('legendPanel');
+      legendBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        legendPanel.classList.toggle('open');
+      });
+      map.on('click', () => legendPanel.classList.remove('open'));
+
+      // ── POPUP ANIMATION — fire once only on open ──────────────────────────────
+      map.on('popupopen', () => {
+        const wrapper = document.querySelector('.leaflet-popup-content-wrapper');
+        const tip = document.querySelector('.leaflet-popup-tip-container');
+        [wrapper, tip].forEach(el => {
+          if (!el) return;
+          el.classList.remove('popup-animate');
+          void el.offsetWidth; // force reflow so class removal registers
+          el.classList.add('popup-animate');
+          el.addEventListener('animationend', () => el.classList.remove('popup-animate'), { once: true });
+        });
+      });
+
+      // ── SEARCH PANEL TOGGLE ────────────────────────────────────────────────────
+      const searchToggle = document.getElementById('searchToggle');
+      const searchPanel = document.getElementById('searchPanel');
+
+      function closeSearchPanel() {
+        searchPanel.classList.remove('open');
+        searchToggle.classList.remove('open');
+      }
+
+      searchToggle.addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = searchPanel.classList.toggle('open');
+        searchToggle.classList.toggle('open', isOpen);
+        if (isOpen) {
+          // Cascade slide-in for visible items
+          const items = [...listEl.querySelectorAll('.facility-item:not(.hidden)')];
+          items.forEach((el, i) => {
+            el.classList.remove('fi-slide-in');
+            void el.offsetWidth; // force reflow to restart animation
+            el.style.animationDelay = `${i * 38}ms`;
+            el.classList.add('fi-slide-in');
+            el.addEventListener('animationend', () => {
+              el.classList.remove('fi-slide-in');
+              el.style.animationDelay = '';
+            }, { once: true });
+          });
+        }
+      });
+
+      map.on('click', closeSearchPanel);
+
+      // ── SEARCH + FILTER ────────────────────────────────────────────────────────
+      let currentFilter = 'all';
+
+      document.getElementById('searchInput').addEventListener('input', applyFilters);
+      document.querySelectorAll('.pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          currentFilter = pill.dataset.filter;
+          applyFilters();
+        });
+      });
+
+      function applyFilters() {
+        const q = document.getElementById('searchInput').value.toLowerCase().trim();
+        let count = 0;
+        document.querySelectorAll('.facility-item').forEach(el => {
+          const ok = (currentFilter === 'all' || el.dataset.type === currentFilter)
+            && (!q || el.dataset.name.includes(q));
+
+          if (ok) {
+            count++;
+            clearTimeout(el._hideTimer);
+            if (el.classList.contains('hidden')) {
+              // Reveal: remove hidden first (so it's in flow), then remove fi-invisible to fade in
+              el.classList.add('fi-invisible');
+              el.classList.remove('hidden');
+              el.getBoundingClientRect(); // force reflow
+              el.classList.remove('fi-invisible');
+            } else {
+              el.classList.remove('fi-invisible');
+            }
+          } else {
+            if (!el.classList.contains('hidden')) {
+              // Hide: fade out, then apply display:none after transition
+              el.classList.add('fi-invisible');
+              clearTimeout(el._hideTimer);
+              el._hideTimer = setTimeout(() => {
+                el.classList.add('hidden');
+              }, 200);
+            }
+          }
+        });
+        document.getElementById('shown-count').textContent = count;
+      }
+
+      // ── RESET ZOOM & AUTO-FIT LAYAR ────────────────────────────────────────────
+      const resetZoomBtn = document.getElementById('resetZoomBtn');
+      const ALL_BOUNDS = L.latLngBounds(facilities.map(f => [f.lat, f.lng]));
+
+      map.fitBounds(ALL_BOUNDS, { padding: [30, 30] });
+
+      resetZoomBtn.addEventListener('click', () => {
+        closeSearchPanel();
+        map.closePopup();
+        map.flyToBounds(ALL_BOUNDS, { padding: [30, 30], animate: true, duration: 1.2 });
+      });
+
+    } // ── END initMap ──────────────────────────────────────────────────────────
+
+  </script>
+</body>
+
+</html>
