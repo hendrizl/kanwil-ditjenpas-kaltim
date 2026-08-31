@@ -32,7 +32,7 @@ export default function UPTPage() {
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
           <div className="w-full aspect-[4/5] sm:aspect-[1/1] md:aspect-[4/3] lg:aspect-[16/9] bg-gray-100 relative">
             <iframe
-              src="https://navipas-kaltim.github.io/peta-pemasyarakatan-kaltim/"
+              src="https://kanwilditjenpaskaltim.github.io/peta-wilayah/"
               title="Peta Pemasyarakatan Kaltim"
               className="w-full h-full absolute inset-0 border-0"
               allowFullScreen
