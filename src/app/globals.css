@@ -1093,7 +1093,7 @@ video {
    ========================================================= */
 
 /* ---------- ≤ 1366px (Laptop) ---------- */
-@media (max-width: 1366px) {
+@media (max-width: 1536px) {
   .hero-section {
     aspect-ratio: 1366 / 768;
   }
@@ -1243,7 +1243,7 @@ video {
 }
 
 /* ---------- ≤ 860px (Tablet - hamburger nav) ---------- */
-@media (max-width: 860px) {
+@media (max-width: 768px) {
   .nav-desktop {
     display: none !important;
   }
