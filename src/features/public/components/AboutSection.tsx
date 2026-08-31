@@ -63,40 +63,18 @@ export default function AboutSection() {
               <Image
                 src="/kanwil-ditjenpas-kaltim/assets/logo_pas.png"
                 alt="Logo Pemasyarakatan"
-                width={220}
-                height={220}
+                width={140}
+                height={140}
                 style={{ objectFit: "contain", maxHeight: "100%", width: "auto" }}
               />
             </div>
 
             <div className="about-card-info">
-              <h3
-                style={{
-                  fontSize: "var(--font-18)",
-                  fontWeight: 700,
-                  color: "#E8C84A",
-                  marginBottom: "4px",
-                }}
-              >
-                Nama Kepala Kantor Wilayah
-              </h3>
-              <p
-                style={{
-                  fontSize: "var(--font-16)",
-                  fontWeight: 700,
-                  color: "#fff",
-                  marginBottom: "4px",
-                }}
-              >
+              <h3>Nama Kepala Kantor Wilayah</h3>
+              <p style={{ fontWeight: 700 }}>
                 Kepala Kantor Wilayah
               </p>
-              <p
-                style={{
-                  fontSize: "var(--font-14)",
-                  color: "rgba(255, 255, 255, 0.8)",
-                  lineHeight: 1.5,
-                }}
-              >
+              <p style={{ opacity: 0.9 }}>
                 Direktorat Jenderal Pemasyarakatan <br />
                 Kalimantan Timur
               </p>

@@ -2,23 +2,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Calendar, ChevronLeft, Share2, Link2, MessageCircle, Mail } from "lucide-react";
-import { DUMMY_NEWS } from "@/data/news";
+import { getNewsAPI } from "@/data/news";
 
-export function generateStaticParams() {
-  return DUMMY_NEWS.map((news) => ({
+export async function generateStaticParams() {
+  const newsList = await getNewsAPI();
+  return newsList.map((news) => ({
     slug: news.slug,
   }));
 }
 
 export default async function BeritaDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const news = DUMMY_NEWS.find((n) => n.slug === slug);
+  const newsList = await getNewsAPI();
+  const news = newsList.find((n) => n.slug === slug);
 
   if (!news) {
     notFound();
   }
 
-  const relatedNews = DUMMY_NEWS.filter((n) => n.slug !== news.slug).slice(0, 3);
+  const relatedNews = newsList.filter((n) => n.slug !== news.slug).slice(0, 3);
 
   return (
     <main className="min-h-screen bg-[#F7F9FC] pb-24">
@@ -48,7 +50,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
                 <Calendar size={18} className="text-[#E8C84A]" /> {news.date}
               </span>
               <span className="flex items-center gap-2">
-                Oleh <span className="font-bold text-white">Humas Kanwil Kaltim</span>
+                Oleh <span className="font-bold text-white">{news.author || "Humas Kanwil Kaltim"}</span>
               </span>
             </div>
           </div>
@@ -61,10 +63,13 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
           <div className="lg:col-span-8 space-y-8">
             <div className="bg-white rounded-3xl p-6 md:p-12 shadow-xl border border-gray-100">
               <div className="w-full aspect-video bg-gray-200 rounded-2xl mb-8 md:mb-10 relative overflow-hidden flex items-center justify-center">
-                {/* Replace with actual Image when available */}
-                <div className="absolute inset-0 bg-[#05284E] flex items-center justify-center opacity-90">
-                  <span className="text-white/40 text-lg font-medium">Gambar Utama Berita</span>
-                </div>
+                {news.content_image || news.thumb_image ? (
+                  <img src={news.content_image || news.thumb_image} alt={news.title} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="absolute inset-0 bg-[#05284E] flex items-center justify-center opacity-90">
+                    <span className="text-white/40 text-lg font-medium">Gambar Utama Berita</span>
+                  </div>
+                )}
               </div>
 
               <div
@@ -106,9 +111,13 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
                   <Link href={`/berita/${relNews.slug}`} key={relNews.slug} className="group block">
                     <div className="flex gap-4">
                       <div className="w-24 h-24 rounded-xl bg-gray-200 shrink-0 relative overflow-hidden flex items-center justify-center">
-                        <div className="absolute inset-0 bg-[#05284E] flex items-center justify-center opacity-80 group-hover:scale-110 transition-transform duration-500">
-                          <span className="text-white/30 text-[10px]">Ilustrasi</span>
-                        </div>
+                        {relNews.thumb_image ? (
+                          <img src={relNews.thumb_image} alt={relNews.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        ) : (
+                          <div className="absolute inset-0 bg-[#05284E] flex items-center justify-center opacity-80 group-hover:scale-110 transition-transform duration-500">
+                            <span className="text-white/30 text-[10px]">Ilustrasi</span>
+                          </div>
+                        )}
                       </div>
                       <div className="flex flex-col justify-center">
                         <span className="text-[11px] text-[#E8C84A] font-bold uppercase tracking-wider mb-1">

@@ -5,6 +5,9 @@ export interface NewsItem {
   date: string;
   excerpt: string;
   content: string;
+  thumb_image?: string;
+  content_image?: string;
+  author?: string;
 }
 
 export const DUMMY_NEWS: NewsItem[] = [
@@ -83,3 +86,100 @@ export const DUMMY_NEWS: NewsItem[] = [
     `
   }
 ];
+
+/**
+ * Mengkonversi URL Google Drive sharing link menjadi direct image URL.
+ * Menggunakan beberapa endpoint untuk kompatibilitas maksimal.
+ * Format input:  https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+ * Format output: https://drive.google.com/thumbnail?id=FILE_ID&sz=w1000
+ */
+function convertGDriveUrl(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+  
+  // Match Google Drive file links
+  const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    // Use thumbnail endpoint with large size — most reliable for embedding
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
+  }
+
+  // Also handle ?id= format
+  const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (idMatch && idMatch[1]) {
+    return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w1000`;
+  }
+
+  // If it's already a direct image URL, return as-is
+  return url;
+}
+
+export async function getNewsAPI(): Promise<NewsItem[]> {
+  const apiUrl = process.env.NEXT_PUBLIC_GAS_API_URL;
+  if (!apiUrl) {
+    console.warn("NEXT_PUBLIC_GAS_API_URL is not set. Using DUMMY_NEWS.");
+    return DUMMY_NEWS;
+  }
+
+  try {
+    const res = await fetch(apiUrl, { cache: 'force-cache' });
+    if (!res.ok) throw new Error(`Failed to fetch news API (HTTP ${res.status})`);
+    
+    const responseData = await res.json();
+
+    // Handle API-level errors (e.g. sheet not found)
+    if (responseData.status === "error") {
+      console.error("GAS API error:", responseData.message);
+      return DUMMY_NEWS;
+    }
+
+    // Validate response structure
+    if (!Array.isArray(responseData.data)) {
+      console.error("GAS API returned unexpected format:", JSON.stringify(responseData).slice(0, 200));
+      return DUMMY_NEWS;
+    }
+
+    // If empty data, fallback
+    if (responseData.data.length === 0) {
+      console.warn("GAS API returned empty data. Using DUMMY_NEWS.");
+      return DUMMY_NEWS;
+    }
+
+    // Sort by published_at descending (newest first)
+    const sortedData = responseData.data.sort((a: any, b: any) => {
+      const dateA = a.published_at ? new Date(a.published_at).getTime() : 0;
+      const dateB = b.published_at ? new Date(b.published_at).getTime() : 0;
+      return dateB - dateA;
+    });
+
+    // Map Google Sheet columns to NewsItem interface
+    return sortedData.map((item: any) => {
+      let formattedDate = "Tidak ada tanggal";
+      if (item.published_at) {
+        try {
+          const d = new Date(item.published_at);
+          if (!isNaN(d.getTime())) {
+            formattedDate = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+          }
+        } catch {
+          // ignore date parse error
+        }
+      }
+
+      return {
+        slug: item.slug || "",
+        title: item.title || "Tanpa Judul",
+        category: item.category_name || "Berita",
+        date: formattedDate,
+        excerpt: item.excerpt || "",
+        content: item.content || "",
+        thumb_image: convertGDriveUrl(item.thumb_image),
+        content_image: convertGDriveUrl(item.content_image),
+        author: item.author_name || "Admin",
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching news from API:", error);
+    return DUMMY_NEWS;
+  }
+}
+

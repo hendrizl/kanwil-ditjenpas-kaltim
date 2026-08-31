@@ -209,7 +209,7 @@ export default function TentangPage() {
             </div>
             <div className="md:col-span-8 lg:col-span-8 p-6 sm:p-10 lg:p-14 flex flex-col justify-center">
               <h3 className="text-[#E8C84A] font-semibold tracking-wider text-xs md:text-sm mb-2 uppercase">Profil Pimpinan</h3>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">Nama Kepala Divisi / Kakanwil</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">Nama Kepala Kantor Wilayah</h2>
               <p className="text-white/70 font-medium mb-4 md:mb-6 text-sm md:text-base">NIP. 1970XXXX XXXX XX X</p>
 
               <div className="space-y-4 text-white/80 leading-relaxed text-justify">
