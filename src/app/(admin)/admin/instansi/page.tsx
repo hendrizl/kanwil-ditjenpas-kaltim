@@ -251,7 +251,7 @@ export default function AdminInstansiPage() {
                     <div className="admin-slide-item__actions">
                       <button 
                         className={`admin-toggle ${slide.active ? "admin-toggle--on" : "admin-toggle--off"}`}
-                        onClick={() => handleToggleStatus(slide.id)}
+                        onClick={() => handleToggleSlide(slide.id)}
                       >
                         {slide.active ? "Aktif" : "Nonaktif"}
                       </button>
