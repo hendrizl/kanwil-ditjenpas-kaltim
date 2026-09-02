@@ -386,7 +386,7 @@ video {
   font-size: clamp(1.5rem, 3vw + 1rem, var(--font-48));
   font-weight: 800;
   line-height: 1.25;
-  max-width: 700px;
+  max-width: 100%;
   margin: 0 0 16px 0;
 }
 
@@ -489,60 +489,33 @@ video {
 
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-  align-items: center;
-}
-
-@media (min-width: 992px) {
-  .about-grid {
-    grid-template-columns: 280px 1fr;
-    gap: 20px 48px;
-    grid-template-rows: auto 1fr;
-    align-items: start;
-  }
+  grid-template-columns: 320px 1fr;
+  gap: 20px 64px;
+  grid-template-rows: auto 1fr;
+  align-items: start;
 }
 
 .about-header {
-  grid-column: 1 / -1;
-}
-
-@media (min-width: 992px) {
-  .about-header {
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
-  }
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
 }
 
 .about-text {
-  grid-column: 1 / -1;
-}
-
-@media (min-width: 992px) {
-  .about-text {
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
-  }
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
 }
 
 .about-card-wrapper {
-  grid-column: 1 / -1;
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  align-self: center;
+  justify-content: flex-start;
   display: flex;
-  justify-content: center;
-}
-
-@media (min-width: 992px) {
-  .about-card-wrapper {
-    grid-column: 1 / 2;
-    grid-row: 1 / 3;
-    align-self: center;
-    justify-content: flex-start;
-  }
 }
 
 .about-card {
   width: 100%;
-  max-width: 260px;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -608,9 +581,9 @@ video {
 
 .upt-grid {
   display: grid;
-  grid-template-columns: 1fr 280px;
+  grid-template-columns: 1fr 320px;
   grid-template-rows: auto 1fr;
-  gap: 20px 48px;
+  gap: 20px 64px;
 }
 
 .upt-header {
@@ -1091,14 +1064,6 @@ video {
 /* =========================================================
    12. RESPONSIVE BREAKPOINTS
    ========================================================= */
-
-/* ---------- ≤ 1366px (Laptop) ---------- */
-@media (max-width: 1536px) {
-  .hero-section {
-    aspect-ratio: 1366 / 768;
-  }
-}
-
 /* ---------- ≤ 1280px (Large Desktop) ---------- */
 @media (max-width: 1280px) {
   :root {
@@ -1108,8 +1073,6 @@ video {
   .nav-desktop {
     gap: 20px;
   }
-
-
 
   .news-card-img {
     height: 190px;
@@ -1127,14 +1090,34 @@ video {
     padding: 60px 0 72px;
   }
 
+  /* Typography Adjustments */
   .section-title {
     font-size: var(--font-32);
   }
 
   .section-label {
+    font-size: var(--font-16);
+  }
+
+  .hero-title {
+    font-size: var(--font-16);
+  }
+
+  .hero-greeting {
     font-size: var(--font-18);
   }
 
+  .body-text {
+    font-size: 15px;
+  }
+
+  /* Button Adjustments */
+  .btn-gold {
+    padding: 10px 24px;
+    font-size: 15px;
+  }
+
+  /* Navbar */
   .navbar {
     padding: 12px 20px;
   }
@@ -1145,62 +1128,6 @@ video {
 
   .nav-desktop {
     gap: 16px;
-  }
-
-  .hero-title {
-    font-size: var(--font-40);
-  }
-
-  .hero-greeting {
-    font-size: var(--font-18);
-  }
-
-  /* About: stack vertically */
-  .about-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-  }
-
-  .about-header {
-    order: 1;
-  }
-
-  .about-card-wrapper {
-    order: 2;
-    width: 100%;
-    max-width: 420px;
-  }
-
-  .about-card {
-    position: static;
-    height: auto;
-  }
-
-  .about-text {
-    order: 3;
-  }
-
-  .about-card-logo {
-    aspect-ratio: 4 / 3;
-    max-height: 320px;
-  }
-
-  /* UPT: stack */
-  .upt-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-
-  .upt-map,
-  .upt-text {
-    flex: 1 1 100%;
-    min-width: 100%;
-  }
-
-  .upt-map {
-    aspect-ratio: 4 / 3;
   }
 
   /* News */
@@ -1242,29 +1169,10 @@ video {
   }
 }
 
-/* ---------- ≤ 860px (Tablet - hamburger nav) ---------- */
+/* ---------- ≤ 768px (Tablet Portrait) ---------- */
 @media (max-width: 768px) {
-  .nav-desktop {
-    display: none !important;
-  }
 
-  .nav-mobile-btn {
-    display: flex !important;
-  }
-
-  .navbar {
-    padding: 10px 16px;
-  }
-
-  .navbar-inner {
-    padding: 10px 16px;
-    border-radius: 12px;
-  }
-
-  .section-padding {
-    padding: 50px 0 60px;
-  }
-
+  /* Typography Adjustments */
   .section-title {
     font-size: var(--font-28);
   }
@@ -1282,12 +1190,46 @@ video {
     font-size: var(--font-14);
   }
 
-  .hero-indicators {
-    bottom: 14px;
+  .body-text {
+    font-size: var(--font-14);
+  }
+
+  /* Button Adjustments */
+  .btn-gold {
+    padding: 8px 20px;
+    font-size: var(--font-14);
+  }
+
+  .btn-gold-sm {
+    padding: 6px 16px;
+    font-size: 12px;
+  }
+
+  /* Layout Stacking */
+  .about-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .about-header {
+    order: 1;
+  }
+
+  .about-card-wrapper {
+    order: 2;
+    width: 100%;
+    max-width: 420px;
   }
 
   .about-card {
+    position: static;
+    height: auto;
     max-width: 380px;
+  }
+
+  .about-text {
+    order: 3;
   }
 
   .about-card-logo {
@@ -1305,6 +1247,49 @@ video {
 
   .about-card-info p {
     font-size: var(--font-14) !important;
+  }
+
+  .upt-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .upt-map,
+  .upt-text {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .upt-map {
+    aspect-ratio: 4 / 3;
+  }
+
+  /* Navbar */
+  .nav-desktop {
+    display: none !important;
+  }
+
+  .nav-mobile-btn {
+    display: flex !important;
+  }
+
+  .navbar {
+    padding: 10px 16px;
+  }
+
+  .navbar-inner {
+    padding: 10px 16px;
+    border-radius: 12px;
+  }
+
+  /* Sections */
+  .section-padding {
+    padding: 50px 0 60px;
+  }
+
+  .hero-indicators {
+    bottom: 14px;
   }
 
   /* News: horizontal scroll */
@@ -1376,15 +1361,12 @@ video {
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 40px;
-    /* Increased from 24px for more separation */
     text-align: center;
   }
 
-  .footer-socmed {
-    align-items: center;
-  }
-
-  .footer-contact {
+  .footer-socmed,
+  .footer-contact,
+  .footer-links {
     align-items: center;
   }
 
@@ -1396,36 +1378,25 @@ video {
     text-align: center;
   }
 
-  .footer-links {
-    align-items: center;
-  }
-
   .footer-logo {
     width: 72px !important;
     height: 72px !important;
   }
 }
 
-/* ---------- ≤ 640px (Large Phone) ---------- */
+/* ---------- ≤ 640px (Mobile) ---------- */
 @media (max-width: 640px) {
   :root {
     --container-padding: 16px;
   }
 
-  .section-padding {
-    padding: 40px 0 48px;
-  }
-
+  /* Typography Adjustments */
   .section-label {
     font-size: var(--font-14);
   }
 
   .section-title {
     font-size: var(--font-24);
-  }
-
-  .body-text {
-    font-size: var(--font-14);
   }
 
   .hero-greeting {
@@ -1438,8 +1409,14 @@ video {
 
   .hero-tagline {
     font-size: var(--font-14);
+    margin-bottom: 20px;
   }
 
+  .body-text {
+    font-size: var(--font-14);
+  }
+
+  /* Button Adjustments */
   .hero-btn-primary,
   .hero-btn-outline {
     width: auto;
@@ -1447,6 +1424,7 @@ video {
     font-size: var(--font-14);
   }
 
+  /* Navbar */
   .navbar {
     padding: 8px 12px;
   }
@@ -1456,13 +1434,32 @@ video {
     border-radius: 10px;
   }
 
+  .navbar-brand img {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .navbar-brand-text {
+    font-size: 12px;
+  }
+
+  .nav-mobile-menu {
+    padding: 16px 20px;
+    border-radius: 12px;
+  }
+
+  .nav-mobile-link {
+    font-size: 14px;
+  }
+
+  /* Sections */
+  .section-padding {
+    padding: 40px 0 48px;
+  }
+
   .hero-section {
     padding: 100px 0 30px;
     aspect-ratio: 390 / 844;
-  }
-
-  .hero-tagline {
-    margin-bottom: 20px;
   }
 
   .hero-cta-row {
@@ -1478,6 +1475,7 @@ video {
     height: 8px !important;
   }
 
+  /* About Card */
   .about-card {
     max-width: 100%;
   }
@@ -1499,8 +1497,13 @@ video {
     font-size: 13px !important;
   }
 
+  .about-grid {
+    gap: 20px;
+  }
+
+  /* News */
   .news-card {
-    flex: 0 0 80%;
+    flex: 0 0 85%;
   }
 
   .news-card-img {
@@ -1518,6 +1521,7 @@ video {
   .news-date-badge {
     font-size: 10px;
     padding: 4px 10px;
+    margin-top: -28px;
   }
 
   .news-nav-btn {
@@ -1530,6 +1534,7 @@ video {
     height: 16px;
   }
 
+  /* Complaint */
   .complaint-grid {
     grid-template-columns: 1fr;
     gap: 12px;
@@ -1552,6 +1557,7 @@ video {
     font-size: var(--font-14);
   }
 
+  /* Footer */
   .footer {
     padding: 32px 0 0;
   }
@@ -1561,29 +1567,30 @@ video {
   }
 
   .footer-brand-title {
-    font-size: var(--font-14);
+    font-size: 13px;
   }
 
   .footer-logo {
     width: 56px !important;
     height: 56px !important;
   }
+
+  .footer-contact-item p {
+    font-size: 12px;
+  }
+
+  .footer-copyright p {
+    font-size: 12px;
+  }
 }
 
-/* ---------- ≤ 480px (Mobile) ---------- */
+/* ---------- ≤ 480px (Small Mobile) ---------- */
 @media (max-width: 480px) {
   :root {
     --container-padding: 14px;
   }
 
-  .section-padding {
-    padding: 32px 0 40px;
-  }
-
-  .section-label {
-    font-size: 13px;
-  }
-
+  /* Typography Adjustments */
   .section-title {
     font-size: var(--font-20);
   }
@@ -1598,30 +1605,21 @@ video {
     font-size: 13px;
   }
 
-  .navbar-brand img {
-    width: 30px !important;
-    height: 30px !important;
+  /* Button Adjustments */
+  .hero-btn-primary,
+  .hero-btn-outline {
+    padding: 8px 16px;
+    font-size: 13px;
+    border-radius: 8px;
   }
 
-  .navbar-brand-text {
-    font-size: 12px;
-  }
-
-  .nav-mobile-menu {
-    padding: 16px 20px;
-    border-radius: 12px;
-  }
-
-  .nav-mobile-link {
-    font-size: 14px;
+  /* Sections */
+  .section-padding {
+    padding: 32px 0 40px;
   }
 
   .hero-section {
     padding: 90px 0 24px;
-  }
-
-  .hero-tagline {
-    margin-bottom: 16px;
   }
 
   .hero-indicators {
@@ -1633,17 +1631,7 @@ video {
     height: 6px !important;
   }
 
-  .hero-btn-primary,
-  .hero-btn-outline {
-    padding: 8px 16px;
-    font-size: 13px;
-    border-radius: 8px;
-  }
-
-  .about-card {
-    max-width: 100%;
-  }
-
+  /* About Card */
   .about-card-logo {
     aspect-ratio: 1 / 1;
     max-height: 200px;
@@ -1657,16 +1645,13 @@ video {
     gap: 20px;
   }
 
+  /* News */
   .news-card {
     flex: 0 0 85%;
   }
 
   .news-card-img {
     height: 130px;
-  }
-
-  .news-card-content {
-    padding: 12px 14px 16px;
   }
 
   .news-card-title {
@@ -1684,6 +1669,7 @@ video {
     height: 34px;
   }
 
+  /* Complaint */
   .complaint-card {
     padding: 16px;
     gap: 12px;
@@ -1697,6 +1683,7 @@ video {
     font-size: 13px;
   }
 
+  /* Footer */
   .footer {
     padding: 24px 0 0;
   }
@@ -1708,14 +1695,6 @@ video {
   .footer-logo {
     width: 44px !important;
     height: 44px !important;
-  }
-
-  .footer-contact-item p {
-    font-size: 12px;
-  }
-
-  .footer-copyright p {
-    font-size: 12px;
   }
 }
 

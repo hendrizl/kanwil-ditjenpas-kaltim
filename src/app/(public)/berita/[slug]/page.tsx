@@ -64,7 +64,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
             <div className="bg-white rounded-3xl p-6 md:p-12 shadow-xl border border-gray-100">
               <div className="w-full aspect-video bg-gray-200 rounded-2xl mb-8 md:mb-10 relative overflow-hidden flex items-center justify-center">
                 {news.content_image || news.thumb_image ? (
-                  <img src={news.content_image || news.thumb_image} alt={news.title} className="w-full h-full object-cover" />
+                  <img src={news.content_image || news.thumb_image} alt={news.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 ) : (
                   <div className="absolute inset-0 bg-[#05284E] flex items-center justify-center opacity-90">
                     <span className="text-white/40 text-lg font-medium">Gambar Utama Berita</span>
@@ -112,7 +112,7 @@ export default async function BeritaDetailPage({ params }: { params: Promise<{ s
                     <div className="flex gap-4">
                       <div className="w-24 h-24 rounded-xl bg-gray-200 shrink-0 relative overflow-hidden flex items-center justify-center">
                         {relNews.thumb_image ? (
-                          <img src={relNews.thumb_image} alt={relNews.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                          <img src={relNews.thumb_image} alt={relNews.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                         ) : (
                           <div className="absolute inset-0 bg-[#05284E] flex items-center justify-center opacity-80 group-hover:scale-110 transition-transform duration-500">
                             <span className="text-white/30 text-[10px]">Ilustrasi</span>

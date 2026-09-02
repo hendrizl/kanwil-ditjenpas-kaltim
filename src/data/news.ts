@@ -121,7 +121,12 @@ export async function getNewsAPI(): Promise<NewsItem[]> {
   }
 
   try {
-    const res = await fetch(apiUrl, { cache: 'force-cache' });
+    // Matikan cache saat development (npm run dev) agar perubahan di Google Sheets langsung terlihat.
+    // Saat build/produksi (npm run build), gunakan 'force-cache' karena static export membutuhkan ini.
+    const isDev = process.env.NODE_ENV === 'development';
+    const res = await fetch(apiUrl, { 
+      cache: isDev ? 'no-store' : 'force-cache' 
+    });
     if (!res.ok) throw new Error(`Failed to fetch news API (HTTP ${res.status})`);
     
     const responseData = await res.json();

@@ -49,7 +49,7 @@ export default async function BeritaPage() {
               <div className="w-full md:w-1/2 aspect-[4/3] md:aspect-auto bg-gray-200 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 md:hidden" />
                 {featured.thumb_image ? (
-                  <img src={featured.thumb_image} alt={featured.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <img src={featured.thumb_image} alt={featured.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 ) : (
                   <div className="w-full h-full bg-[#082D4B] flex items-center justify-center text-white/50 group-hover:scale-105 transition-transform duration-700">
                     <span className="text-lg font-medium">Gambar Utama Berita</span>
@@ -95,7 +95,7 @@ export default async function BeritaPage() {
                 <Link href={`/berita/${news.slug}`} key={idx} className="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100 hover:shadow-xl transition-shadow cursor-pointer group flex flex-col">
                   <div className="aspect-video bg-gray-200 relative overflow-hidden">
                     {news.thumb_image ? (
-                      <img src={news.thumb_image} alt={news.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img src={news.thumb_image} alt={news.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="w-full h-full bg-[#05284E] flex items-center justify-center opacity-80 group-hover:scale-105 transition-transform duration-500">
                         <span className="text-white/30 text-sm">Ilustrasi Berita</span>
